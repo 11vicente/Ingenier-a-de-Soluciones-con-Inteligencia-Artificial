@@ -59,12 +59,41 @@ Cada subcarpeta IL contiene ejemplos en Python (`.py`), notebooks (`.ipynb`) o g
 - Python 3.8+
 - Jupyter Notebook (opcional, para `.ipynb`)
 - Instalar dependencias según el módulo:
-  - `pip install langchain openai crewai` (para agentes y ejemplos avanzados)
+  - `pip install langchain openai crewai python-dotenv` (para agentes y ejemplos avanzados)
   - Otros: `pandas`, `requests`, etc.
 
-### Variables de entorno recomendadas
-- `OPENAI_API_KEY` (para ejemplos con OpenAI/LangChain)
-- `GITHUB_TOKEN` (para ejemplos con GitHub API)
+### Variables de entorno y archivo `.env`
+
+Los notebooks leen las credenciales usando `os.environ` y cargan automáticamente un archivo `.env` gracias a la librería `python-dotenv`. Sigue estos pasos para configurarlas:
+
+1. **Copia el archivo de ejemplo** en la raíz del proyecto:
+   ```bash
+   cp .env.example .env
+   ```
+2. **Edita `.env`** con tus valores reales (nunca lo subas a git, ya está en `.gitignore`):
+   ```
+   GITHUB_TOKEN=ghp_tu_token_aqui
+   GITHUB_BASE_URL=https://models.inference.ai.azure.com
+   ```
+3. **Instala `python-dotenv`** si no lo tienes:
+   ```bash
+   pip install python-dotenv
+   ```
+
+> **¿Por qué no funcionan mis variables sin este paso?**
+> Un archivo `.env` no se carga automáticamente en el entorno de Python/Jupyter.
+> La llamada `load_dotenv()` al inicio de cada notebook lee el archivo `.env` y
+> vuelca sus valores en `os.environ`, haciendo que `os.environ.get("GITHUB_TOKEN")`
+> devuelva el valor correcto.
+
+#### Variables disponibles
+| Variable | Descripción |
+|---|---|
+| `GITHUB_TOKEN` | Token personal de GitHub (GitHub Models API) |
+| `GITHUB_BASE_URL` | URL base de GitHub Models (`https://models.inference.ai.azure.com`) |
+| `OPENAI_BASE_URL` | URL alternativa para APIs compatibles con OpenAI |
+| `OPENAI_API_KEY` | Clave API de OpenAI (si usas los servicios oficiales) |
+| `LANGCHAIN_API_KEY` | Clave de LangSmith para observabilidad (opcional) |
 
 ---
 
